@@ -1,0 +1,28 @@
+[
+    {
+        "texture": "Tinesh\\SunDancer\\SunDancer",
+        "emissive": false,
+        "parallax": false,
+        "subsurface_foliage": false,
+        "subsurface": false,
+        "specular_level": 0.04,
+        "subsurface_color": [1, 1, 1],
+        "roughness_scale": 1,
+        "subsurface_opacity": 1,
+        "displacement_scale": 1
+    },
+    {
+        "texture": "Tinesh\\SunDancer\\EclipseScythe",
+        "emissive": true,
+        "emissive_scale": 1.6,
+        "emissive_color": [1.0, 0.72, 0.36],
+        "parallax": false,
+        "subsurface_foliage": false,
+        "subsurface": false,
+        "specular_level": 0.04,
+        "subsurface_color": [1, 1, 1],
+        "roughness_scale": 1,
+        "subsurface_opacity": 1,
+        "displacement_scale": 1
+    }
+]

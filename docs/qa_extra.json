@@ -1,0 +1,94 @@
+{
+ "Cup fringe visibility (tools/dev/fringe_check.py)": [
+  "Share of the fringe's vertices a viewer in front can see (rays toward the viewer; the cups, band and skin block them), level and from a little above (the game camera). Before: the fringe hung from the cups' lower edge, under the breasts; now it hangs from a gold chain across the lower front of the cups, with no strands in the first stretch by the cleavage.",
+  "",
+  "| Body | before (round 2) | now |",
+  "|---|---|---|",
+  "| Custom preset 1 | 1% / 0% | 94% / 91% |",
+  "| Custom preset 2 | 0% / 0% | 94% / 91% |",
+  "| HL Harvest Queen | 25% / 0% | 95% / 92% |",
+  "| HL Tavern Witch | 0% / 0% | 92% / 87% |",
+  "| HL Night Huntress | 70% / 70% | 96% / 95% |",
+  "| HL Wisp Dancer | 70% / 50% | 96% / 94% |",
+  "| HL Ember Warden | 0% / 0% | 94% / 90% |",
+  "| Zeroed Sliders | 99% / 99% | 100% / 100% |",
+  "| the player's body (save) | 1% / 0% | 94% / 91% |",
+  "",
+  "What stays hidden is mostly where the strands follow the breast's curve round toward the arm."
+ ],
+ "Bracelet rigidity (tools/dev/rigid_check.py)": [
+  "Distinct bone-weight sets per wrist: the old forearm guards had 986 to 2164 (every ring along the forearm turned by a different share of the twist bones: the long plate twisted and crumpled); the Bracelets have exactly 1 per wrist (all 9441 vertices of a wrist share the forearm's twist-bone weights averaged at the wrist), so the set turns with the wrist as one rigid piece."
+ ],
+ "Bone weights: four bones per vertex, no jumps (round 5)": [
+  "A NIF keeps 4 bones per vertex. The export used to cut the others vertex by vertex, so a bone could be kept at one vertex and dropped at the next; when that bone turns, the two part. The largest change of the weights across one edge (half the L1 distance of the two weight rows), BodySlide data:",
+  "",
+  "| Shape | before | now | edges over 0.2, before / now |",
+  "|---|---|---|---|",
+  "| Loincloth panels (where the cloth leaves the body: skin bones, chain anchors, two chains) | 0.30 | 0.12 | 74 / 0 |",
+  "| Arm Veils (just below the cord: upper arm, twist bone, anchors, first chain bones) | 0.53 | 0.18 | 390 / 0 |",
+  "| Briefs | 0.14 | 0.14 | 0 / 0 |",
+  "",
+  "The chain anchors are kinematic children of the bone they hang from (the pelvis, the upper arm), so their weight goes to that bone; at most 4 bones remain and a bone that has to go fades out over a few rings of vertices (mk_fit.limit_influences). What remains up to 0.12 / 0.18 is the even blend from one chain to the next. On the back panel the in-game crease (a staircase of triangle edges a third of the way down) sat exactly where the jumps were. Across the buttock cleft the panels' and the briefs' weights blend into their left/right mean toward the middle (mk_fit.blend_midline): the skin's switch from one buttock to the other made a light block on one side of the back panel in game."
+ ],
+ "Twist bones in the pose test": [
+  "The animation reader returned the upper arm's twist bone turned 49 degrees about an axis across the arm in every frame of the walk, run and sprint animations (in sneaking the same angle is a true twist about the arm's axis), which would tear every UBE arm. Since round 3 the arms' twist bones are posed with their parent bones, for the skin and the garments alike; with the old handling the veils showed 23 to 36 false pokes in running."
+ ],
+ "Garment over garment in the pose test": [
+  "\"Loincloth vs briefs\" counts only the briefs' vertices under a loincloth face that lies the same way at rest (round 5): the briefs' rims and the belt's lower rim resting on their waistband met the other layer at a slant, and in a pose their rays slipped past it and counted as pokes. Its depth column is the distance along the briefs' normal to the face found inward, which overstates the depth at the back of the waistband: measured to the nearest loincloth point, the deepest crossing there in sneaking is 0.18. What remains are the base game's deep crouch and cross-legged sitting: the edge of the briefs at the hip crease rises with the thigh into the top of the front panel (whose lower part the physics moves out of the way in game), and the back of the waistband slides against the belt's lower edge."
+ ],
+ "Physics (tools/dev/xsd_check.py)": [
+  "loincloth.xml, loinclothnobriefs.xml and veils.xml validate against FSMP's hdtSMP64.xsd. Veils: 8 kinematic body bones, 6 anchors on the upper arms, 30 dynamic bones in 6 chains, 30 constraints with asymmetric limits (0.02 rad toward the arm, 1.0 away, 0.2 sideways); colliders private to the item (EV_PhysCloth per-vertex, 9 x 16 spheres per veil on the veil's inner surface; EV_PhysBody per-triangle, arms decimated four times finer than the torso). Since round 5 the visible cloth carries no weight on the chain anchors (counted as the bone they hang from); the anchors stay in the skeleton, in the system files and on the colliders."
+ ],
+ "Arm veils under gravity (tools/dev/veil_gravity.py)": [
+  "The pose test skins the veils' chains rigidly with the upper arm; in game gravity turns each chain bone as far as the limits of veils.xml allow. This test turns every dynamic chain bone toward straight down within those limits, then counts veil vertices inside the posed body (Custom preset 1, Zeroed Sliders and the player's body). Worst case: nothing collides. With the collision: a bone stops where its collision spheres (EV_PhysCloth) would enter the body (0.3 margin), as FSMP does. Animations: the player's own (Gulan0 idles, walks, runs and sprints, light-armour CATA) and, for reference, the base game's. Round 5 (new veil weights) gave the same numbers as round 4.",
+  "",
+  "| Animation | round 3 (worst case) | now, worst case | now, with the collision |",
+  "|---|---|---|---|",
+  "| Gulan0 idles (6) | 332 to 1100 vertices, up to 2.67 deep | 0 (idle 53: 8, 0.19) | 0 (idle 53: 7, 0.19) |",
+  "| Gulan0 walks (3) | 288 to 849, up to 2.65 | 0 / 187 / 0 | 0 / 12 (0.53) / 0 |",
+  "| Gulan0 runs and sprints, light armour | not tested | 0 | 0 |",
+  "| sitting (base game) | 283 to 357 | 0 | 0 |",
+  "| base game walk / run | 610 to 1339 | 1862 / 857 | 0 / 0 |",
+  "| base game sprint / sneak | 1151 to 1540 / 541 to 925 | 767 / 410 | 302 / 286 |",
+  "",
+  "In the base game's sprint and sneak the large bodies' own arms are inside the torso (1,300 to 2,000 arm skin vertices), and the veil goes with them; the player uses other animations."
+ ],
+ "Loincloth over the briefs: clearance (tools/dev/layer_gap.py)": [
+  "The clip test counts pokes deeper than 0.05. Two cloth layers that nearly touch show in game too, so this test measures the clearance itself: from every vertex of the briefs under a loincloth face that lies the same way (6,416 vertices), the distance out to the loincloth along the briefs' normal, in the rest shape of the physics cloth. Since round 5 the panels are kept at least 0.2 off the briefs below the belt and move out at least as far as the briefs under every slider; the belt moves out with them under the sliders, and under the belt the top of the briefs' waistband dips a little into the cleft to leave it room.",
+  "",
+  "| | all presets at weight 0 and 100, and the player's body |",
+  "|---|---|",
+  "| pokes | 0 |",
+  "| least clearance below the belt (what shows under the panels) | 0.144 (Zeroed), 0.15 to 0.18 elsewhere; 0 vertices under 0.1 |",
+  "| least clearance under the belt (hidden) | 0.059 (Zeroed), 0.09 to 0.13 elsewhere |",
+  "",
+  "Before these changes the new briefs' waistband ran 0.03 under the top of the front panel and their middle at the back came within 0.01 to 0.06 of the belt."
+ ],
+ "Briefs over the whole body": [
+  "Round 5: a new low tanga (piece_briefs.py). The waistband follows the belt's line, the legs are cut high along the groin into a gusset 2.6 wide on the part of the crotch that faces down, the back is a cheeky cut, the sides end at a gold ring on each hip; the cloth is shaped on a smooth envelope of the pelvis, stretched over its hollows away from the edges and cut along smooth curves; an even trim strip 0.46 wide runs along every edge in texture islands of its own (arc length by distance from the edge). Worn over the Wrap's whole lower body, with the weights of the skin under each vertex, 0.2 more room over the vulva and slider data pushed out along the cloth's own normals (along the body's, they crumpled the gusset on large bodies). Static: 9 pokes, 0.08 deep, on one preset of 18 (Tavern Witch at weight 0; 0 with the loincloth over them); round 4: 13, 0.08. Poses: 17, 0.23 deep, at the hip crease in sneaking (round 4: 92, 0.32) and 59, 0.86 deep, in the base game's cross-legged sitting pose, where the large bodies' thigh passes into the belly (round 4: 167, 0.71).",
+  "",
+  "Tried and dropped: the skin under the briefs in a partition of its own, hidden by a second slot on the items with the briefs (as UBE does with its partition 53): 0 static pokes and at most 46, 0.16 deep, in poses; but in the player's load order every candidate slot is used by things worn every day (55 by facial piercings, 53 by chest piercings, 61 by the handheld lantern, 52 by other panties), which would take the briefs off or open a hole in the body (C:\\Modding\\_tools\\scripts\\slot_usage.py)."
+ ],
+ "Loincloth panels: drape in the player's idles (tools/dev/panel_drape.py, round 6)": [
+  "FSMP holds the panels' chains close to their rest pose against the pelvis (angular springs of 14 against a pull of gravity of about 1 on a whole chain; an inertia of 6 makes them swing slowly), so in a still pose the hanging cloth stays with the pelvis while the part lying on the body moves with the skin under it. At the panels' edges that skin is up to a fifth on the thighs, and until round 5 the cloth just below it turned to the thighs as well: whenever the hips turned against the legs (the player's hip-shot idles turn them 15 to 21 degrees), the upper part was dragged up to 1 unit sideways and the cloth bent into an S where the chains took over (the in-game screenshot). Since round 6 the panels follow the pelvis and the buttocks, not the thighs. The test poses each built panel (BodySlide data) with its chains held to the pelvis and measures, down its two edges and its middle, the sideways displacement relative to the pelvis: the sharpest bend (second difference over 1.6 units of height) and the largest shift between any height and the hem. Poses: the player's six Gulan0 idles, Gulan0 walk and CATA run, and the base game's walk, run, sprint, sneak and sitting; bodies: Custom preset 1, Tavern Witch and the player's.",
+  "",
+  "| Panel | round 5: sharpest bend (player's idles) / largest shift | round 6 |",
+  "|---|---|---|",
+  "| back | 1.03 (1.03) / 1.88 | 0.05 (0.03) / 0.14 |",
+  "| front | 0.93 (0.93) / 0.69 | 0.20 (0.20) / 0.42 |",
+  "",
+  "What remains on the front panel follows the belt and the belly above it (the spine leaning in idles 3 and 16). Without the thighs the skin and the briefs still stay under the panels: in the pose tables above, one skin vertex 0.13 to 0.16 deep at the front panel's left edge in one frame of the base game's walk and one of its sprint, where the thigh lifts (none in the player's Gulan0 walk and run with a prototype of the same weights); the rest as in round 5. The weights still keep at most 4 bones per vertex (largest jump across an edge 0.12)."
+ ],
+ "Baked ambient occlusion per item (round 6)": [
+  "The atlas carries ambient occlusion baked from the meshes: the vanilla diffuse is darkened by it and the PBR map (_rmaos, blue channel) holds it. Until round 5 every part was shaded by every item at once, and the briefs, whose texture islands the Loincloth with Briefs and the Briefs share, took the shadow of the loincloth's back panel and belt: worn alone, two brown smudges on the seat where the panel's edges lie, and a dark embroidered waistband, back and front. Each part is now shaded only by what is always worn with it (build_meshes.compute_worn_ao): its own item, the items of the other slots and the skin; the three slot-52 items replace each other, so a part they share is shaded only by what they all have.",
+  "",
+  "| Briefs island (shipped 8K PBR map) | AO least / 5th percentile, round 5 | round 6 |",
+  "|---|---|---|",
+  "| back cloth | 0.00 / 0.46 | 0.55 / 0.92 (the darkest left is inside the cleft) |",
+  "| front cloth | 0.16 / 0.64 | 0.58 / 0.96 |",
+  "| embroidered waistband, back | 0.00 / 0.13 | 0.54 / 0.94 |",
+  "| embroidered waistband, front | 0.04 / 0.15 | 0.58 / 1.00 |",
+  "",
+  "Every other item's occlusion is unchanged (103 parts identical, the same texture layout); the loincloth's belt, buckle and belt coins, which both loincloths share, are no longer shaded by the briefs either (0.04 or less on average, on the backs of the coins)."
+ ]
+}

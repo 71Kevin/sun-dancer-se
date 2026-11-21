@@ -1,0 +1,14 @@
+{
+  "preset_files": [
+    {"path": "My Presets\\CalienteTools\\BodySlide\\SliderPresets\\My presets.xml", "names": ["My Preset (UBE)"]}
+  ],
+  "test_presets": ["My Preset (UBE)", "-Zeroed Sliders-"],
+  "pose_presets": ["My Preset (UBE)", "-Zeroed Sliders-"],
+  "main_preset": "My Preset (UBE)",
+  "tool_presets": {
+    "panel_drape": ["My Preset (UBE)"],
+    "diag_wrap": ["My Preset (UBE)"],
+    "fringe_render": ["-Zeroed Sliders-"]
+  },
+  "labels": {"My Preset (UBE)": "Custom preset 1"}
+}

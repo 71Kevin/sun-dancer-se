@@ -1,0 +1,13 @@
+cache/
+out/
+dist/
+publish/
+
+plugin/bin/
+plugin/obj/
+
+__pycache__/
+*.pyc
+
+ESTADO.md
+tools/presets.local.json
